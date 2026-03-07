@@ -83,5 +83,27 @@ const canonicalURL = new URL(seo?.canonical_url ?? Astro.url.pathname, baseUrl);
         });
       }
     </script>
+    <script>
+      console.log("running live editor test");
+      document.addEventListener("cloudcannon:load", function (e) {
+        onLiveEditorLoad(e.detail.CloudCannon);
+      });
+
+      function onLiveEditorLoad(CloudCannon) {
+        console.log("onLiveEditorLoad: ", CloudCannon);
+        CloudCannon.enableEvents();
+      }
+
+      document.addEventListener("cloudcannon:update", async function (e) {
+        useNewPageProps(e.detail.CloudCannon);
+      });
+
+      async function useNewPageProps(CloudCannon) {
+        console.log("useNewPageProps: ", CloudCannon);
+        const latestValue = await CloudCannon.value();
+
+        console.log({ latestValue });
+      }
+    </script>
   </body>
 </html>
